@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>后台登录</title>
+<meta charset="utf-8" />
+<style>
+    h2 {
+        font-family: "幼圆";
+        color: #fff;
+    }
+    .res-item {position: relative; width:270px; margin:0 auto; margin-bottom: 8px;background-color: #fff; }
+    .res-item .input-item {display: inline-block;width: 100%;height: 40px;border: none; font-size: inherit;}
+    .res-item .input-item:focus { 
+            outline-offset: 0;
+            
+            background-color: #fefffe;
+            border: 1px solid #0E90D2;
+            outline: 0;
+           
+    }
+       
+    .res-item .input-item:focus   .res-icon { color: #0E90D2; }
+    
+    #res-btn{ /* 按钮美化 */
+        width: 270px; /* 宽度 */
+        height: 40px; /* 高度 */
+        border-width: 0px; /* 边框宽度 */
+        border-radius: 3px; /* 边框半径 */
+        background: #1E90FF; /* 背景颜色 */
+        cursor: pointer; /* 鼠标移入按钮范围时出现手势 */
+        outline: none; /* 不显示轮廓线 */
+        font-family: Microsoft YaHei; /* 设置字体 */
+        color: white; /* 字体颜色 */
+        font-size: 17px; /* 字体大小 */
+    }
+    #res-btn:hover { /* 鼠标移入按钮范围时改变颜色 */
+        background: #5599FF;
+    }
+
+</style>
+</head>
+<body style="background:#1E9FFF; margin:0 auto; text-align: center;margin-top:200px;" >
+    <h2 style="font-size: 30px;">宾 馆 管 理 系 统</h2>
+	<div style="padding: 8px 6px;font-size: 14px;">    
+        <div class="res-item">      
+            <input type="text" id="username"  placeholder="用户名" class="input-item" onfocus="this.placeholder=''"  onblur="this.placeholder='用户名'">
+
+        </div>
+        <div class="res-item">         
+            <input type="passWord" id="pwd" placeholder="密码" class="input-item" 
+            onfocus="this.placeholder=''"  onblur="this.placeholder='密码'">
+        </div> 
+        <div class="res-btn">
+            <button type="button" id="res-btn" class="am-btn am-btn-block" >  登录  </button>
+        </div>
+    </div>
+	<script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/amazeui.min.js"></script>
+    <script src="assets/js/amazeui.min.js"></script>
+	<script>
+		$(function(){
+
+            $('#res-btn').on('click',function(){
+                var name=$('#username').val();
+                var pwd=$('#pwd').val();
+                if(!name){
+                    $('#username').focus();
+                    document.querySelector('#username').placeholder = '请填写用户名或邮箱';
+                    return
+                }           
+                
+                if(!pwd){
+                    $('#pwd').focus();
+                    document.querySelector('#pwd').placeholder = '请填写密码';
+                    return
+                }
+               
+                // 登录成功跳转
+                var data = {name:name,pwd:pwd} 
+                $.ajax({
+                    url: 'http://127.0.0.1:5000/login',
+                    type: 'post',
+                    data:data,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function (result) {                                
+                       if(result['code']==400){
+                            alert(result['msg'])
+                            $('#pwd').val('');
+                        }
+                        else{                          
+                             window.location.href='index.html'
+                        }
+                    }
+                })     
+                
+            })
+
+
+
+        })
+	</script>
+</body>
+</html>

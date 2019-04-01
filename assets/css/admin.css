@@ -1,0 +1,48 @@
+body{
+    background: #F3F3F3;
+}
+.am-topbar {
+    background:#393D49!important;
+}
+.am-topbar a {
+    color: #fff;
+}
+.am-topbar a:hover {
+    color: #f8f8f8;
+}
+
+.am-topbar-right .adminname{
+    background:#fff;
+    color: #0e84d2;;
+    border: 1px solid #fff;
+    cursor: default;
+}
+
+.left{
+    width: 260px;
+    min-height: 700px;
+    float: left;
+    border-right: 1px solid #cecece;
+   
+}
+.left ul li a{
+    color: #007ACC;
+}
+
+.right{
+    padding: 20px;
+    width: auto;
+    overflow: hidden;
+    min-height: 700px;
+    background: #fff;
+    border: 1px solid #cecece;
+    border-left: none;
+    background:#ffffffe8;
+}
+
+.left .am-panel .am-list a{
+    color: #555;
+}
+.left .am-panel .am-list .active{
+    background: #f8f8f8;
+}

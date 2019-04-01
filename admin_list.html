@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理系统</title>
+    <link rel="stylesheet" href="assets/css/amazeui.min.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <style>
+        .applyer-info {
+            padding: 20px 67px;
+        }
+
+        .applyer-info .am-input-group {
+            margin-bottom: 20px;
+            width: 485px;  
+        }
+        .applyer-info span {
+            width:97.6px;
+        }
+        td {
+          vertical-align:middle !important;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="am-topbar " style="padding:0 20px;">
+        <h1 class="am-topbar-brand">
+            <a href="index.html">后台管理系统</a>
+        </h1>
+
+        <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only"
+            data-am-collapse="{target: '#doc-topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span
+                class="am-icon-bars"></span></button>
+
+        <div class="am-collapse am-topbar-collapse" id="doc-topbar-collapse">
+
+            <ul class="am-nav am-nav-pills am-topbar-nav">
+                <li class="am-active"><a href="index.html">首页</a></li>
+
+            </ul>
+
+            <div class="am-topbar-right">
+            </div>
+
+
+            <div class="am-topbar-right">
+                <button class="am-btn am-btn-primary am-topbar-btn am-btn-sm" id="sign_up">退出登录</button>
+            </div>
+            <div class="am-topbar-right">
+                <span class="am-btn am-btn-primary am-topbar-btn am-btn-sm adminname"></span>
+            </div>
+        </div>
+    </header>
+
+    <div class="am-fl left">
+        <ul class="am-list admin-sidebar-list" id="collapase-nav-1">
+
+
+            <li class="am-panel">
+                <a data-am-collapse="{parent: '#collapase-nav-1', target: '#association'}">
+                    <i class="am-icon-bank am-margin-left-sm"></i> 房间管理 <i
+                        class="am-icon-angle-right am-fr am-margin-right"></i>
+                </a>
+                <ul class="am-list am-collapse admin-sidebar-sub " id="association">
+                        <li><a href="room_strandard.html"><i class="am-icon-user am-margin-left-sm"></i> 房间类型标准 </a></li>
+                        <li><a href="association.html"><i class="am-icon-user am-margin-left-sm"></i> 房间状态 </a></li>
+                    </ul>
+            </li>
+
+            <li class="am-panel">
+                <a data-am-collapse="{parent: '#collapase-nav-1', target: '#company-nav'}">
+                    <i class="am-icon-table am-margin-left-sm"></i> 订单管理 <i
+                        class="am-icon-angle-right am-fr am-margin-right"></i>
+                </a>
+                <ul class="am-list am-collapse admin-sidebar-sub" id="company-nav">
+                    <li><a href="#/companyAdd"><span class="am-icon-table am-margin-left-sm"></span> 添加订单 </a></li>
+                    <li><a href="#/companyList/0"><span class="am-icon-table am-margin-left-sm"></span> 未退房订单 </a>
+                    </li>
+                    <li><a href="#/companyList/0"><span class="am-icon-table am-margin-left-sm"></span> 历史订单 </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="am-panel">
+                <a data-am-collapse="{parent: '#collapase-nav-1', target: '#role-nav'}">
+                    <i class="am-icon-table am-margin-left-sm"></i> 管理员管理 <i
+                        class="am-icon-angle-right am-fr am-margin-right"></i>
+                </a>
+                <ul class="am-list am-collapse admin-sidebar-sub" id="role-nav">
+                    <li><a href="admin_list.html"><span class="am-icon-table am-margin-left-sm"></span> 管理员列表 </a></li>
+                    <li><a href="admin_add.html"><span class="am-icon-table am-margin-left-sm"></span> 添加管理员 </a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="right">
+        <h2>管理员列表</h2>
+        <div id="table">
+            <table class="am-table am-table-bordered">
+                <thead>
+                    <tr>
+                        <th>用户名</th>
+                        <th>权限</th>
+                        <th>状态</th>
+                        <th>删除</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="admin in admins" >
+                        <td v-text="admin.name"></td>
+                        <td v-text="admin.role"></td>
+                        <td v-if='admin.status==0'><span onclick='more_link(this)' :data-id=admin.id class="am-btn am-btn-danger am-radius am-topbar-btn am-btn-sm " >未启用</span></td>
+                        <td v-else='admin.status==0'><span onclick='more_link(this)' :data-id=admin.id class="am-btn am-btn-primary am-topbar-btn am-btn-sm am-radius" >已启用</span></td>
+                        <td><span onclick='del_link(this)' :data-id=admin.id class="am-btn am-btn-primary am-topbar-btn am-btn-sm am-radius" >删除</span></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    
+
+</body>
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/amazeui.min.js"></script>
+<script src="assets/js/vue.min.js"></script>
+<script src="assets/js/admin.js"></script>
+<script>
+    var role;
+    $("#sign_up").click(function(){
+        window.location.href = 'login.html'
+    })
+    $.ajax({
+                    url: 'http://127.0.0.1:5000/isLogin',
+                    type: 'post',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function (result) {                                
+                       if(result['code']==400){
+                            alert(result['msg'])
+                        }
+                        else{                          
+                             $('.adminname').text(result['name']);
+                             role=result['role']
+
+                        }
+                    }
+         })
+
+    function more_link(obj) {
+        if(role=="超级管理员")
+        {
+          var id = obj.dataset.id
+          var arr;
+          for (i = 0; i < admins.length; i++) {
+              if (admins[i]['id'] == id) {
+                  arr = admins[i]
+              }
+          }
+          var data = {id:arr.id} 
+                  $.ajax({
+                      url: 'http://127.0.0.1:5000/admin-status',
+                      type: 'post',
+                      data:data,
+                      xhrFields: {
+                          withCredentials: true
+                      },
+                      success: function (result) { 
+                          if(result['code']==200) 
+                              alert(result['msg']);                     
+                          window.location.href='admin_list.html'
+                      }
+                  })
+        }
+        else
+          alert("您不是超级管理员没有此权限")
+        
+    }
+    function del_link(obj) {
+        if(role=="超级管理员")
+        {
+          var id = obj.dataset.id
+          var arr;
+          for (i = 0; i < admins.length; i++) {
+              if (admins[i]['id'] == id) {
+                  arr = admins[i]
+              }
+          }
+          var data = {id:arr.id} 
+                  $.ajax({
+                      url: 'http://127.0.0.1:5000/admin-del',
+                      type: 'post',
+                      data:data,
+                      xhrFields: {
+                          withCredentials: true
+                      },
+                      success: function (result) { 
+                          if(result['code']==200) 
+                              alert(result['msg']);                     
+                          window.location.href='admin_list.html'
+                      }
+                  })
+        }
+        else
+          alert("您不是超级管理员没有此权限")
+        
+    }
+    var url = "http://127.0.0.1:5000/admin-list"
+    var admins
+
+    new Vue({
+        el: '#table',
+        data: {
+            admins: []
+        },
+        created: function () {
+            //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
+            var self = this;
+            $.ajax({
+                url: url,
+                type: 'post',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (result) {
+                    self.admins = result
+                    admins = result
+                }
+
+            })
+
+        }
+    })
+</script>
+
+</html>
